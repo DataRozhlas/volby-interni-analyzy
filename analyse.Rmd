@@ -34,3 +34,6 @@ Takže pro 80 procent obcí stačí udělat si místo na 7 stran, pro 90 procent
     filter(pocet>11) %>%
     arrange(desc(pocet))
 ```
+
+## Navrhuju uříznout to na 16
+Když uděláme ve sčítací aplikaci místo pro 16 stran, vejdou se nám na jednu stránku všechny kandidátky ve všech krajských městech s výjimkou Brna (22 subjektů). Nevleze se ani Praha hl. m. (29) a Praha 9 (28). Jinak všechny důležité obce ano.
