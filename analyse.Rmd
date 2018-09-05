@@ -1,0 +1,36 @@
+---
+title: "Analýzy k volbám 2018"
+author: "petr.koci@rozhlas.cz"
+output:
+  html_notebook:
+    toc: true
+    toc_float: true
+---
+
+# Počet kandidujících subjektů v obcích 
+
+```{r}
+download.file("https://volby.cz/opendata/kv2018/KV2018reg20181031_xlsx.zip", "KV2018reg20181031_xlsx.zip")
+unzip("KV2018reg20181031_xlsx.zip")
+library(readxl)
+kandidatky_obce <- read_excel("kvros.xlsx")
+```
+
+```{r}
+hist(table(kandidatky_obce$KODZASTUP))
+```
+
+```{r}
+  quantile(table(kandidatky_obce$KODZASTUP), prob = c(0.2, 0.4, 0.6, 0.8, 0.85, 0.9, 0.95, 1))
+```
+
+Takže pro 80 procent obcí stačí udělat si místo na 7 stran, pro 90 procent 9 stran, pro 95 procent 11 stran. Blbý je, že, mezi těmi pěti procenty, který mají víc než 11 stran jsou prakticky všechna velká města, viz tabulka:
+
+```{r}
+  library(dplyr)
+  kandidatky_obce %>%
+    group_by(KODZASTUP, NAZEVZAST) %>%
+    summarise(pocet=n()) %>%
+    filter(pocet>11) %>%
+    arrange(desc(pocet))
+```
