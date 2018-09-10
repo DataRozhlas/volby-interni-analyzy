@@ -7,6 +7,37 @@ output:
     toc_float: true
 ---
 
+# Kde je nejvíc kandidátů na mandát?
+
+## Nejmíň
+```{r}
+download.file("https://volby.cz/opendata/kv2018/KV2018reg20181031_xlsx.zip", "KV2018reg20181031_xlsx.zip")
+unzip("KV2018reg20181031_xlsx.zip")
+library(readxl)
+zastupitelstva <- read_excel("kvrzcoco.xlsx")
+library(dplyr)
+zastupitelstva_mandaty <- zastupitelstva %>%
+  select(KODZASTUP, MANDATY, NAZEVOBCE)
+kandidati <- read_excel("kvrk.xlsx")
+kandidati_obce <- kandidati %>%
+  group_by(KODZASTUP) %>%
+  summarise(POCET_KANDIDATU=n())
+zastupitelstva_mandaty %>%
+  left_join(kandidati_obce) %>%
+  mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
+  arrange(desc(KANDIDATU_NA_MANDAT))
+```
+
+## Nejvíc
+
+```{r}
+zastupitelstva_mandaty %>%
+  left_join(kandidati_obce) %>%
+  mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
+  arrange(KANDIDATU_NA_MANDAT)
+```
+
+
 # Počet kandidujících subjektů v obcích 
 
 ```{r}
