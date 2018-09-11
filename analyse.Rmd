@@ -7,34 +7,135 @@ output:
     toc_float: true
 ---
 
-# Kde je nejvíc kandidátů na mandát?
+# 0. Stažní dat ČSÚ
 
-## Nejmíň
+Aktuální k 11. září 2018. [Co všechno data obsahují?](https://volby.cz/opendata/kv2018/KV2018regPopis.pdf).
+
 ```{r}
+library(readxl)
+
+# 2018
 download.file("https://volby.cz/opendata/kv2018/KV2018reg20181031_xlsx.zip", "KV2018reg20181031_xlsx.zip")
 unzip("KV2018reg20181031_xlsx.zip")
-library(readxl)
-zastupitelstva <- read_excel("kvrzcoco.xlsx")
-library(dplyr)
-zastupitelstva_mandaty <- zastupitelstva %>%
-  select(KODZASTUP, MANDATY, NAZEVOBCE)
-kandidati <- read_excel("kvrk.xlsx")
-kandidati_obce <- kandidati %>%
-  group_by(KODZASTUP) %>%
-  summarise(POCET_KANDIDATU=n())
-zastupitelstva_mandaty %>%
-  left_join(kandidati_obce) %>%
-  mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
-  arrange(desc(KANDIDATU_NA_MANDAT))
+zastupitelstva18 <- read_excel("kvrzcoco.xlsx")
+strany18 <- read_excel("kvros.xlsx")
+kandidati18 <- read_excel("kvrk.xlsx")
+file.remove(list.files(pattern="*.xlsx|*.xml|*.zip"))
+
+# 2014
+download.file("https://volby.cz/opendata/kv2014/KV2014reg20141014_xlsx.zip", "KV2014reg20141014_xlsx.zip")
+unzip("KV2014reg20141014_xlsx.zip")
+zastupitelstva14 <- read_excel("kvrzcoco.xlsx")
+strany14 <- read_excel("kvros.xlsx")
+kandidati14 <- read_excel("kvrk.xlsx")
+file.remove(list.files(pattern="*.xlsx|*.xml|*.zip"))
+
+# číselník okresů
+download.file("https://volby.cz/opendata/kv2018/KV2018ciselniky20181031.zip", "ciselniky.zip")
+unzip("ciselniky.zip")
+nuts18 <- read_excel("cnumnuts.xlsx")
+file.remove(list.files(pattern="*.xlsx|*.xml|*.zip"))
 ```
 
-## Nejvíc
+
+# 1. Počet kandidátů na mandát
+
+Jaká je v jednotlivých obcích poptávka po práci v zastupitelstvu?
+
+## Příprava dat
+```{r}
+library(tidyverse) 
+
+# počet kandidátů v každém zastupitelstvu
+kandidati_obce <- kandidati18 %>%
+  group_by(KODZASTUP) %>%
+  summarise(POCET_KANDIDATU=n())
+
+# počet mandátů v každém zastupitelstvu, odebrat jednotlivé obvody, nechat jen celá zastupitelstva
+zastupitelstva_mandaty <- zastupitelstva18 %>%
+  filter(OBVODY!=2) %>%
+  left_join(nuts18, by=c("OKRES" = "NUMNUTS")) %>%
+  select(KODZASTUP, MANDATY, NAZEVZAST, NAZEVNUTS)
+```
+
+
+## Obce, kde nekandiduje nikdo
+
+Našli jsme devět obcí, kde nekandiduje nikdo. Největší z nich je Lipovec v okrese Blansko, nejbližší Roblín v Praze-západ.
+
+```{r}
+nikdo <- zastupitelstva_mandaty %>%
+  anti_join(kandidati_obce) %>%
+  arrange(desc(MANDATY))
+nikdo
+```
+
+Týká se to obcí, které mají celkem 3050 obyvatel.
+
+```{r}
+nikdo %>%
+  left_join(zastupitelstva18) %>%
+  select(POCOBYV) %>%
+  sum()
+```
+
+
+## Kde je kandidátů míň než mandátů
+
+V sedmnácti obcích je kandidátů méně než mandátů a nepodaří se v nich tedy naplnit zastupitelstvo. Největší takovou obcí jsou Tatobity v okrese Semily.
+
+```{r}
+min <- zastupitelstva_mandaty %>%
+  left_join(kandidati_obce) %>%
+  mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
+  filter(KANDIDATU_NA_MANDAT<1) %>%
+  arrange(KANDIDATU_NA_MANDAT)
+min
+```
+
+Týká se to obcí, které mají celkem 5400 obyvatel.
+
+```{r}
+min %>%
+  left_join(zastupitelstva18) %>%
+  select(POCOBYV) %>%
+  sum()
+```
+
+
+## Kde je přesně jeden kandidát na mandát
+
+V 857 obcích, tedy zhruba ve 13 procentech ze všech, jsou volby jen formalitou, protože kandidátů je stejně jako mandátů.
+
+```{r}
+jeden <- zastupitelstva_mandaty %>%
+  left_join(kandidati_obce) %>%
+  mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
+  filter(KANDIDATU_NA_MANDAT==1) %>%
+  arrange(desc(MANDATY))
+jeden
+```
+
+Týká se to obcí, které mají celkem 363 248.
+
+```{r}
+jeden %>%
+  left_join(zastupitelstva18) %>%
+  select(POCOBYV) %>%
+  sum()
+```
+
+
+## Kde je největší poptávka po práci v zastupitelstvu?
+
+Nejvíc lidí usiluje o jeden mandát v Praze (24 kandidátů na mandát) a v krajských městech. Mimo krajská města a jejich městské části je mimořádně vysoká konkurence v Šumperku, ve Strakonicích,v Hodoníně, v Jirkově, v České Lípě či v Opavě (13 kandidátů na mandát).
 
 ```{r}
 zastupitelstva_mandaty %>%
   left_join(kandidati_obce) %>%
   mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
-  arrange(KANDIDATU_NA_MANDAT)
+  distinct() %>%
+  arrange(desc(KANDIDATU_NA_MANDAT))
 ```
 
 
