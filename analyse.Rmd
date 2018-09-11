@@ -122,7 +122,7 @@ zastupitelstva_mandaty %>%
   arrange(desc(MANDATY))
 ```
 
-Týká se to obcí, které mají celkem 363 248.
+Týká se to obcí, které mají celkem 363 248 obyvatel a 7105 kandidátů, kteří mají své mandáty už jisté.
 
 ```{r}
 zastupitelstva_mandaty %>%
