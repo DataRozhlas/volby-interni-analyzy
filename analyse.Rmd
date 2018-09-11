@@ -64,16 +64,18 @@ zastupitelstva_mandaty <- zastupitelstva18 %>%
 Našli jsme devět obcí, kde nekandiduje nikdo. Největší z nich je Lipovec v okrese Blansko, nejbližší Roblín v Praze-západ.
 
 ```{r}
-nikdo <- zastupitelstva_mandaty %>%
+zastupitelstva_mandaty %>%
   anti_join(kandidati_obce) %>%
+  select(NAZEVZAST, NAZEVNUTS, MANDATY) %>%
   arrange(desc(MANDATY))
-nikdo
 ```
 
 Týká se to obcí, které mají celkem 3050 obyvatel.
 
 ```{r}
-nikdo %>%
+zastupitelstva_mandaty %>%
+  anti_join(kandidati_obce) %>%
+  arrange(desc(MANDATY)) %>%
   left_join(zastupitelstva18) %>%
   select(POCOBYV) %>%
   sum()
@@ -85,18 +87,22 @@ nikdo %>%
 V sedmnácti obcích je kandidátů méně než mandátů a nepodaří se v nich tedy naplnit zastupitelstvo. Největší takovou obcí jsou Tatobity v okrese Semily.
 
 ```{r}
-min <- zastupitelstva_mandaty %>%
+zastupitelstva_mandaty %>%
   left_join(kandidati_obce) %>%
   mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
   filter(KANDIDATU_NA_MANDAT<1) %>%
+  select(NAZEVZAST,NAZEVNUTS,MANDATY,POCET_KANDIDATU,KANDIDATU_NA_MANDAT) %>%
   arrange(KANDIDATU_NA_MANDAT)
-min
 ```
 
 Týká se to obcí, které mají celkem 5400 obyvatel.
 
 ```{r}
-min %>%
+zastupitelstva_mandaty %>%
+  left_join(kandidati_obce) %>%
+  mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
+  filter(KANDIDATU_NA_MANDAT<1) %>%
+  arrange(KANDIDATU_NA_MANDAT) %>%
   left_join(zastupitelstva18) %>%
   select(POCOBYV) %>%
   sum()
@@ -108,18 +114,22 @@ min %>%
 V 857 obcích, tedy zhruba ve 13 procentech ze všech, jsou volby jen formalitou, protože kandidátů je stejně jako mandátů.
 
 ```{r}
-jeden <- zastupitelstva_mandaty %>%
+zastupitelstva_mandaty %>%
   left_join(kandidati_obce) %>%
   mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
   filter(KANDIDATU_NA_MANDAT==1) %>%
+  select(NAZEVZAST,NAZEVNUTS,MANDATY,POCET_KANDIDATU,KANDIDATU_NA_MANDAT) %>%
   arrange(desc(MANDATY))
-jeden
 ```
 
 Týká se to obcí, které mají celkem 363 248.
 
 ```{r}
-jeden %>%
+zastupitelstva_mandaty %>%
+  left_join(kandidati_obce) %>%
+  mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
+  filter(KANDIDATU_NA_MANDAT==1) %>%
+  arrange(desc(MANDATY)) %>%
   left_join(zastupitelstva18) %>%
   select(POCOBYV) %>%
   sum()
@@ -135,6 +145,7 @@ zastupitelstva_mandaty %>%
   left_join(kandidati_obce) %>%
   mutate(KANDIDATU_NA_MANDAT=POCET_KANDIDATU/MANDATY) %>%
   distinct() %>%
+  select(NAZEVZAST, NAZEVNUTS, MANDATY, POCET_KANDIDATU, KANDIDATU_NA_MANDAT) %>%
   arrange(desc(KANDIDATU_NA_MANDAT))
 ```
 
