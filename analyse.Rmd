@@ -30,10 +30,22 @@ strany14 <- read_excel("kvros.xlsx")
 kandidati14 <- read_excel("kvrk.xlsx")
 file.remove(list.files(pattern="*.xlsx|*.xml|*.zip"))
 
-# číselník okresů
+# číselník okresů 2018
 download.file("https://volby.cz/opendata/kv2018/KV2018ciselniky20181031.zip", "ciselniky.zip")
 unzip("ciselniky.zip")
 nuts18 <- read_excel("cnumnuts.xlsx")
+file.remove(list.files(pattern="*.xlsx|*.xml|*.zip"))
+
+# číselník politické příslušnosti kandidátů 2018
+download.file("https://volby.cz/opendata/kv2018/KV2018ciselniky20181031.zip", "ciselniky.zip")
+unzip("ciselniky.zip")
+cpp18 <- read_excel("cpp.xlsx")
+file.remove(list.files(pattern="*.xlsx|*.xml|*.zip"))
+
+# číselník navrhujících stran 2018
+download.file("https://volby.cz/opendata/kv2018/KV2018ciselniky20181031.zip", "ciselniky.zip")
+unzip("ciselniky.zip")
+cns18 <- read_excel("cns.xlsx")
 file.remove(list.files(pattern="*.xlsx|*.xml|*.zip"))
 ```
 
@@ -149,6 +161,118 @@ zastupitelstva_mandaty %>%
   arrange(desc(KANDIDATU_NA_MANDAT))
 ```
 
+# 2. "Skryté" kandidátky
+
+Systematicky „přebarvené” kandidátky, jak jste si představovali, jsme nenašli. Pokud o nějaké víte, dejte vědět, mohlo nám něco utéct.
+
+Je to okrajový jev, který se týká řádově jednoho z tisíce kandidátů. Přesto se dají najít případy, kdy se na místní úrovni na jedné kandidátce sejdou z hlediska celostátní politiky překvapivé kombinace, například Zelený na kandidátce ODS, člen ODS či ČSSD u lidovců, komunista u sociálních demokratů, Svobodný u SPD nebo Okamurovec na kandidátce komunistů, člen ANO 2011 u STAN nebo u SPD.
+
+Většina kandidátů (180 894, tedy 83,5 procenta) má jinou politickou příslušnost než navrhující stranu.
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  nrow()
+```
+
+Drtivá většina - přes 99 % - z toho jsou nestraníci. Zbývající jedno procento kandidátů, které do voleb posílá jiná strana než ta, jejímiž jsou členy, tvoří 216 lidovců, 202 občanských demokratů, 190 sociálních demokratů, 157 topkařů, 82 zelených, 76 svobodných, 72 anonistů, 43 pirátů a 407 ostatních.
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  group_by(PSTRANA) %>%
+  summarise(KANDIDATI=n()) %>%
+  left_join(cpp18) %>%
+  arrange(desc(KANDIDATI))
+```
+
+## Za koho kandidují lidovci, když ne za lidovce
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA==720) %>%
+  group_by(NSTRANA) %>%
+  summarise(KANDIDATI=n()) %>%
+  left_join(cns18) %>%
+  arrange(desc(KANDIDATI))
+```
+
+
+Nejčastěji členové jiných stran kandidují jako nezávislí kandidáti (1158), dále pak za ODS (75), za STAN (52), za lidovce (40), za KSČM (35), za NEZÁVISLÉ (31), Piráty (24), Svobodné (19), SPD (19), a TOP 09 (18).
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  group_by(NSTRANA) %>%
+  summarise(KANDIDATI=n()) %>%
+  left_join(cns18) %>%
+  arrange(desc(KANDIDATI))
+```
+
+## Členové jiných stran, kteří kandidují za ODS
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==53) %>%
+  left_join(cpp18) %>%
+  group_by(ZKRATKAP30) %>%
+  summarise(POCET=n()) %>%
+  arrange(desc(POCET))
+```
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==53) %>%
+  left_join(cpp18)
+```
+
+## Členové jiných stran, kteří kandidují za STAN
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==166) %>%
+  left_join(cpp18) %>%
+  group_by(ZKRATKAP30) %>%
+  summarise(POCET=n()) %>%
+  arrange(desc(POCET))
+```
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==166) %>%
+  left_join(cpp18)
+```
+
+## Členové jiných stran, kteří kandidují za KSČM
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==47) %>%
+  left_join(cpp18) %>%
+  group_by(ZKRATKAP30) %>%
+  summarise(POCET=n()) %>%
+  arrange(desc(POCET))
+```
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==47) %>%
+  left_join(cpp18)
+```
 
 # Počet kandidujících subjektů v obcích 
 
