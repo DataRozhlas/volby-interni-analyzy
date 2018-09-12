@@ -395,7 +395,30 @@ zastupitelstva14 %>%
   select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY18=MANDATY))
 ```
 
+# 4. Přesuny kandidátů v obecních volbách mezi stranami od 2006 do 2018 
 
+Poznámka: sledujeme stranu, která kandidáta navrhla, tj. vidíme i do koalic
+
+## Grafy
+
+Poznámka: v grafu není SNK, které sdružuje nezávislé kandidáty, ve skutečnosti většina přesunů probíhá právě mezi SNK a jinou stranou; pokud bychom ale SNK ukazovali, ostatní strany by v grafu nebyly viditelné, takže se soustředíme spíš na „konkurenční boj“ než na SNK
+
+- https://dev.datarozhlas.cz/presuny-kandidatu-2018/charts/presuny0610.htm
+- https://dev.datarozhlas.cz/presuny-kandidatu-2018/charts/presuny1014.htm
+- https://dev.datarozhlas.cz/presuny-kandidatu-2018/charts/presuny1418.htm
+
+## Otázky na politologa
+-	V minulých obecních volbách lákalo přeběhlíky hlavně ANO (z ostatních stran mimo SNK přešlo 1427 lidí). V letošních volbách naopak z ANO do jiných stran víc lidí odejde, než přijde (do ANO 694 lidí, z ANO 956 lidí). Přitom u strany s takovými preferencemi, která znamená výtah k moci, by se dalo čekat spíš posilování. Proč nepřichází?
+-	Mezi každými obecními volbami přeběhne cca 20 tisíc lidí, tj. asi desetina všech kandidátů. Stále víc se ale přesunují v rámci SNK, mezi klasickými stranami (tj. všemi kromě SNK) přesunů rychle ubývá. Je to tak? Pokud ano, čím to je?
+-	Mezi všemi čtyřmi volbami byl nejsilnější proud přeběhlíků mezi ČSSD a KSČM (oběma směry). Proč zrovna u nich?
+-	Ve volbách 2010 byl největší příjemce TOP 09, ve volbách 2014 to bylo ANO, ve volbách 2018 STAN. Nějaký komentář, hlavně asi k tomu STAN?
+-	Naopak největší dárce byla 2010 SNK ED a KDU-ČSL, 2014 suverénně ODS, 2018 ČSSD a TOP 09. Opět komentář k trendům?
+
+Pokud by to někdo chtěl točit, najdu nějakou přeběhlou kandidátní listinu, ideálně asi minule v ANO, letos jinde. Pokud ne, řekněte včas, ať si seženu politologa.
+
+Podobně můžu najít kandidátku, která letos kandiduje jako nezávislá, ale její členové jsou straníci, nebo je strana nominovala.
+
+Na cokoliv dalšího se ptejte, mám ta čísla zpracovaná, stačí říct.
 
 # 5. Počet kandidujících subjektů v obcích 
 
