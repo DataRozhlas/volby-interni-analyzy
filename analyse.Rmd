@@ -286,6 +286,117 @@ kandidati18 %>%
 
 Další kombinace na vyžádání.
 
+# 3. <a name="zastupitele"></a>Obce, kde se od minulých voleb změnil počet mandátů
+
+Obce si mohou v mezích daných zákonem samy stanovit, kolik budou mít zastupitelů.
+
+![](pocet-zastupitelu.png)
+
+Zajímavé to může být u obcí od 500 do 10 tisíc obyvatel. Ty se totiž mohou samy rozhodnout, budou-li mít méně než 15 zastupitelů. V takovém případě jim odpadá zákonná povinnost volit radu obce. Podrobněji o tom píše například [František Korbel v Moderní obci](https://moderniobec.cz/snizeni-poctu-zastupitelu/).
+
+## Obce, kde se od minulých voleb změnil počet zastupitelů
+
+Ve 356 se obcích se od minulých voleb změnil počet zastupitelů. 
+
+```{r}
+zastupitelstva14 %>%
+  filter(OBVODY!=2) %>%
+  select(TYPZASTUP, DRUHZASTUP, KODZASTUP, NAZEVZAST, MANDATY14=MANDATY) %>%    
+  left_join(zastupitelstva18) %>%
+  filter(MANDATY14!=MANDATY) %>%
+  select(NAZEVZAST, OKRES, MANDATY14, MANDATY18=MANDATY) %>%
+  arrange(desc(MANDATY18)) %>%
+  left_join(nuts18, by=c("OKRES"="NUMNUTS")) %>%
+  filter(NAZEVZAST!="Praha 9" & NAZEVZAST!="Lišov") %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY14, MANDATY18)
+```
+
+Těchto 34 obcí se rozhodlo počet zastupitelů snížit pod 15 a zbavit se tak zákonné povinnosti volit radu obce.
+
+```{r}
+zastupitelstva14 %>%
+  filter(OBVODY!=2) %>%
+  select(TYPZASTUP, DRUHZASTUP, KODZASTUP, NAZEVZAST, MANDATY14=MANDATY) %>%    
+  left_join(zastupitelstva18) %>%
+  filter(MANDATY14!=MANDATY) %>%
+  select(NAZEVZAST, OKRES, MANDATY14, MANDATY18=MANDATY) %>%
+  arrange(desc(MANDATY18)) %>%
+  left_join(nuts18, by=c("OKRES"="NUMNUTS")) %>%
+  filter(NAZEVZAST!="Praha 9" & NAZEVZAST!="Lišov") %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY14, MANDATY18) %>%
+  filter(MANDATY18<15&MANDATY14>14)
+```
+
+Těchto 12 obcí naopak zvýšilo počet zastupitelů a na 15 a povinnost volit radu jim tak nově vznikla.
+```{r}
+zastupitelstva14 %>%
+  filter(OBVODY!=2) %>%
+  select(TYPZASTUP, DRUHZASTUP, KODZASTUP, NAZEVZAST, MANDATY14=MANDATY) %>%    
+  left_join(zastupitelstva18) %>%
+  filter(MANDATY14!=MANDATY) %>%
+  select(NAZEVZAST, OKRES, MANDATY14, MANDATY18=MANDATY) %>%
+  arrange(desc(MANDATY18)) %>%
+  left_join(nuts18, by=c("OKRES"="NUMNUTS")) %>%
+  filter(NAZEVZAST!="Praha 9" & NAZEVZAST!="Lišov") %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY14, MANDATY18) %>%
+  filter(MANDATY18>14&MANDATY14<15)
+```
+
+## Obce, které mají sudý počet zastupitelů (a hlasování v nich může skončit remízou)
+
+V minulých volbách bylo takových obcí 44, letos již jen 37 - zřejmě s tím nejsou moc dobré zkušenosti...
+
+
+Letos jsou to tyto obce:
+
+```{r}
+is.even <- function(x) x %% 2 == 0
+zastupitelstva18 %>%
+  filter(is.even(MANDATY)) %>%
+  left_join(nuts18, by=c("OKRES" = "NUMNUTS")) %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY) %>%
+  arrange(desc(MANDATY))
+```
+
+Před čtyřmi lety to byly tyto obce: 
+```{r}
+zastupitelstva14 %>%
+  filter(is.even(MANDATY)) %>%
+  left_join(nuts18, by=c("OKRES" = "NUMNUTS")) %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY) %>%
+  arrange(desc(MANDATY))
+```
+
+Jedenáct obcí, které sudý počet zastupitelů letos nově zavedly:
+
+```{r}
+zastupitelstva18 %>%
+  filter(is.even(MANDATY)) %>%
+  left_join(nuts18, by=c("OKRES" = "NUMNUTS")) %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY18=MANDATY) %>%
+  anti_join(zastupitelstva14 %>%
+  filter(is.even(MANDATY)) %>%
+  left_join(nuts18, by=c("OKRES" = "NUMNUTS")) %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY14=MANDATY)) %>%
+  arrange(desc(MANDATY18))
+```
+
+Obce, které před letošními volbami sudý počet zastupitelů zrušily:
+
+```{r}
+zastupitelstva14 %>%
+  filter(is.even(MANDATY)) %>%
+  left_join(nuts18, by=c("OKRES" = "NUMNUTS")) %>%
+  arrange(desc(MANDATY)) %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY14=MANDATY) %>%
+  anti_join(zastupitelstva18 %>%
+  filter(is.even(MANDATY)) %>%
+  left_join(nuts18, by=c("OKRES" = "NUMNUTS")) %>%
+  select(NAZEVZAST, OKRES=NAZEVNUTS, MANDATY18=MANDATY))
+```
+
+
+
 # 5. Počet kandidujících subjektů v obcích 
 
 ```{r}
