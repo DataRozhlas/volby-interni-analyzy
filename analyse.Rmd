@@ -163,9 +163,9 @@ zastupitelstva_mandaty %>%
 
 # 2. <a name="skryte"></a>"Skryté" kandidátky
 
-Systematicky „přebarvené” kandidátky, jak jste si představovali, jsme nenašli. Pokud o nějaké víte, dejte vědět, mohlo nám něco utéct.
+Systematicky „přebarvené” kandidátky jsme nenašli. Pokud o nějaké víte, dejte vědět, mohlo nám něco utéct.
 
-Je to okrajový jev, který se týká řádově jednoho z tisíce kandidátů. Přesto se dají najít případy, kdy se na místní úrovni na jedné kandidátce sejdou z hlediska celostátní politiky překvapivé kombinace, například Zelený na kandidátce ODS, člen ODS či ČSSD u lidovců, komunista u sociálních demokratů, Svobodný u SPD nebo Okamurovec na kandidátce komunistů, člen ANO 2011 u STAN nebo u SPD.
+Je to okrajový jev, který se týká méně než jednoho ze sta kandidátů. Přesto se dají najít případy, kdy se na místní úrovni na jedné kandidátce sejdou z hlediska celostátní politiky překvapivé kombinace, například Zelený na kandidátce ODS, člen ODS či ČSSD u lidovců, komunista u sociálních demokratů, Svobodný u SPD nebo Okamurovec na kandidátce komunistů, člen ANO 2011 u STAN nebo u SPD. 
 
 Většina kandidátů (180 894, tedy 83,5 procenta) má jinou politickou příslušnost než navrhující stranu.
 
