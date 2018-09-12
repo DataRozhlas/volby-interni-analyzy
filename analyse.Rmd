@@ -261,6 +261,8 @@ kandidati18 %>%
   left_join(cpp18)
 ```
 
+Další kombinace na vyžádání.
+
 # Počet kandidujících subjektů v obcích 
 
 ```{r}
