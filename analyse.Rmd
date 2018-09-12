@@ -161,7 +161,7 @@ zastupitelstva_mandaty %>%
   arrange(desc(KANDIDATU_NA_MANDAT))
 ```
 
-# 2. "Skryté" kandidátky
+# 2. <a name="skryte"></a>"Skryté" kandidátky
 
 Systematicky „přebarvené” kandidátky, jak jste si představovali, jsme nenašli. Pokud o nějaké víte, dejte vědět, mohlo nám něco utéct.
 
@@ -185,19 +185,6 @@ kandidati18 %>%
   left_join(cpp18) %>%
   arrange(desc(KANDIDATI))
 ```
-
-## Za koho kandidují lidovci, když ne za lidovce
-
-```{r}
-kandidati18 %>%
-  filter(PSTRANA!=NSTRANA) %>%
-  filter(PSTRANA==720) %>%
-  group_by(NSTRANA) %>%
-  summarise(KANDIDATI=n()) %>%
-  left_join(cns18) %>%
-  arrange(desc(KANDIDATI))
-```
-
 
 Nejčastěji členové jiných stran kandidují jako nezávislí kandidáti (1158), dále pak za ODS (75), za STAN (52), za lidovce (40), za KSČM (35), za NEZÁVISLÉ (31), Piráty (24), Svobodné (19), SPD (19), a TOP 09 (18).
 
