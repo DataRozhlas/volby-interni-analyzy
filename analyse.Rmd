@@ -198,6 +198,29 @@ kandidati18 %>%
   arrange(desc(KANDIDATI))
 ```
 
+## Členové stran, kteří kandidují jako nezávislí kandidáti
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==80) %>%
+  left_join(cpp18) %>%
+  group_by(ZKRATKAP30) %>%
+  summarise(POCET=n()) %>%
+  arrange(desc(POCET))
+```
+
+```{r}
+kandidati18 %>%
+  filter(PSTRANA!=NSTRANA) %>%
+  filter(PSTRANA!=99) %>%
+  filter(NSTRANA==80) %>%
+  left_join(cpp18)
+```
+
+
+
 ## Členové jiných stran, kteří kandidují za ODS
 
 ```{r}
@@ -263,7 +286,7 @@ kandidati18 %>%
 
 Další kombinace na vyžádání.
 
-# Počet kandidujících subjektů v obcích 
+# 5. Počet kandidujících subjektů v obcích 
 
 ```{r}
 download.file("https://volby.cz/opendata/kv2018/KV2018reg20181031_xlsx.zip", "KV2018reg20181031_xlsx.zip")
